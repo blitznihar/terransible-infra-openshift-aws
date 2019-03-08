@@ -1,0 +1,9 @@
+---
+- name: Create openshift Master
+  hosts: all
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  tags: [openshiftmaster]
+  roles:
+  - openshiftcommon

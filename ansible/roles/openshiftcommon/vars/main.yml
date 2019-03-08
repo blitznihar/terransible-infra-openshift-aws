@@ -1,0 +1,29 @@
+list_of_ports:
+  - 8000:9400
+  - 30000:32767
+  - 6781:6785
+  - 6443
+  - 2379:2380
+  - 10250:10255
+
+list_of_packages:
+    - git
+    - texlive-latex
+    - lvm2
+    - device-mapper
+    - device-mapper-persistent-data
+    - device-mapper-event
+    - device-mapper-libs
+    - device-mapper-event-libs
+    # - centos-release-openshift-origin310
+    - epel-release
+    - docker
+    - git
+    - pyOpenSSL
+    - NetworkManager
+    #- nginx
+
+services_to_startenable:
+    - docker
+    - NetworkManager
+    #- nginx

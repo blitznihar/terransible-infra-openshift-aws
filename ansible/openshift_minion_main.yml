@@ -1,0 +1,9 @@
+---
+- name: Create openshift Minion
+  hosts: all
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  tags: [openshiftminion]
+  roles:
+  - openshiftcommon

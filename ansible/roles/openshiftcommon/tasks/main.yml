@@ -1,0 +1,56 @@
+- name: Disable SELinux
+  selinux:
+    state: disabled
+
+- name: setenforce 0
+  command: setenforce 0
+
+- name: setenforce 0
+  command: sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+
+- name: modprobe
+  modprobe:
+    name: br_netfilter
+    state: present
+
+- name: modprobe 2
+  shell: sysctl -p
+
+- name: update kernel settings
+  sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: Allow Required Ports
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: "{{ item }}"
+    ctstate: NEW,ESTABLISHED
+    jump: ACCEPT
+  with_items: "{{ list_of_ports }}"
+
+
+
+- name: Install all packages dependencies
+  package:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items: "{{ list_of_packages }}"
+
+
+- name: Start and Enable docker
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items: "{{ services_to_startenable }}"
+
+- name: docker storage conf file
+  copy:
+    content: "DEVS=/dev/xvdb\nVG=docker-vg\n"
+    dest: /etc/sysconfig/docker-storage-setup
